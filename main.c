@@ -69,6 +69,21 @@ double integral(Func f, double a, double b, double eps)
     return cur_integral;
 }
 
+double g1(double x)
+{
+    return ln(x);
+}
+
+double g2(double x)
+{
+    return -2 * x + 14;
+}
+
+double g3(double x)
+{
+    return 1 / (2 - x) + 6;
+}
+
 void helper(void)
 {
     printf("Справка:\n"
@@ -155,13 +170,28 @@ int main(int argc, char *argv[])
                 return 1;
             }
 
-            a = atoi(argv[i + 3]);
-            b = atoi(argv[i + 4]);
+            char *ptrEnd;
+            a = strtod(argv[i + 3], &ptrEnd);
+
+            if (ptrEnd != '\0')
+            {
+                printf("Ошибка. Некорректное значение %s", argv[i + 3]);
+
+                return 1;
+            }
+
+            b = strtod(argv[i + 4], &ptrEnd);
+
+            if (ptrEnd != '\0')
+            {
+                printf("Ошибка. Некорректное значение %s", argv[i + 4]);
+
+                return 1;
+            }
 
             if (a >= b)
             {
                 printf("Ошибка. Задайте верные пределы нахождения точек пересечения функций. (a < b)");
-                helper();
 
                 return 1;
             }
@@ -171,7 +201,15 @@ int main(int argc, char *argv[])
                 printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
                        "Задайте иные промежутки.",
                        f1_root == 1 ? f1_root : f2_root, b);
-                helper();
+
+                return 1;
+            }
+
+            double eps = strtod(argv[i + 5], &ptrEnd);
+
+            if (ptrEnd != '\0' || eps <= 0)
+            {
+                printf("Ошибка. Некорректное значение eps.\n");
 
                 return 1;
             }
