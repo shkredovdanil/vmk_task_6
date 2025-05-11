@@ -6,7 +6,7 @@
 
 typedef double (*Func)(double);
 
-double root(Func f, Func g, double a, double b, double eps, int* iter)
+double root(Func f, Func g, double a, double b, double eps, int *iter)
 {
     double fa = f(a), fb = f(b);
     double ga = g(a), gb = g(b);
@@ -138,6 +138,11 @@ int main(int argc, char *argv[])
             print_roots = 1;
         }
 
+        if (!strcmp(argv[i], "--print-iters"))
+        {
+            print_iters = 1;
+        }
+
         if (!strcmp(argv[i], "--test-root"))
         {
             test_root = 1;
@@ -265,7 +270,7 @@ int main(int argc, char *argv[])
             {
                 printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
                        "Задайте иные промежутки.",
-                       (int) f_integral, a, b);
+                       (int)f_integral, a, b);
 
                 return 1;
             }
@@ -284,7 +289,7 @@ int main(int argc, char *argv[])
     if (print_roots)
     {
         int iter1 = 0, iter2 = 0, iter3 = 0;
-        
+
         double x1 = root(f1, f2, 4, 8, 0.0001, &iter1);
         double x2 = root(f1, f3, 2.1, 4, 0.0001, &iter2);
         double x3 = root(f2, f3, 4, 6, 0.0001, &iter3);
@@ -298,7 +303,22 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    if (print_iters)
+    {
+        int iter1 = 0, iter2 = 0, iter3 = 0;
 
+        double x1 = root(f1, f2, 4, 8, 0.0001, &iter1);
+        double x2 = root(f1, f3, 2.1, 4, 0.0001, &iter2);
+        double x3 = root(f2, f3, 4, 6, 0.0001, &iter3);
+
+        printf("Количество итераций для нахождения точек пересечения функций:\n"
+               "\t y = lnx \t y = -2x + 14 \t\t за %d\n"
+               "\t y = lnx \t y = 1 / (2 - x) + 6 \t за %d\n"
+               "\t y = -2x + 14 \t y = 1 / (2 - x) + 6 \t за %d\n",
+               iter1, iter2, iter3);
+
+        return 0;
+    }
 
     return 0;
 }
