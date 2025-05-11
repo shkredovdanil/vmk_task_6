@@ -215,7 +215,72 @@ int main(int argc, char *argv[])
                 return 1;
             }
         }
-        
+        if (!strcmp(argv[i], "--test-integral"))
+        {
+            test_integ = 1;
+
+            if (i + 4 != argc - 1)
+            {
+                printf("Ошибка. Для --test-integral требуется ровно 4 аргумента.\n");
+                helper();
+
+                return 1;
+            }
+
+            f_integral = atoi(argv[i + 1]);
+
+            if (f_integral > 3 || f_integral < 1)
+            {
+                printf("Ошибка функции имеют нумерацию от 1 до 3.\n");
+                helper();
+
+                return 1;
+            }
+
+            char *ptrEnd;
+            a = strtod(argv[i + 2], &ptrEnd);
+
+            if (*ptrEnd != '\0')
+            {
+                printf("Ошибка. Некорректное значение %s", argv[i + 2]);
+
+                return 1;
+            }
+
+            b = strtod(argv[i + 3], &ptrEnd);
+
+            if (*ptrEnd != '\0')
+            {
+                printf("Ошибка. Некорректное значение %s", argv[i + 3]);
+
+                return 1;
+            }
+
+            if (a >= b)
+            {
+                printf("Ошибка. Задайте верные пределы нахождения точек пересечения функций. (a < b)");
+
+                return 1;
+            }
+
+            if (f_integral == 1 && a <= 0)
+            {
+                printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
+                       "Задайте иные промежутки.",
+                       f_integral, a, b);
+
+                return 1;
+            }
+
+            double eps = strtod(argv[i + 4], &ptrEnd);
+
+            if (*ptrEnd != '\0' || eps <= 0)
+            {
+                printf("Ошибка. Некорректное значение eps.\n");
+
+                return 1;
+            }
+        }
     }
 
     return 0;
