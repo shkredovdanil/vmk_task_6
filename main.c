@@ -6,12 +6,10 @@
 
 typedef double (*Func)(double);
 
-double root(Func f, Func g, double a, double b, double eps)
+double root(Func f, Func g, double a, double b, double eps, int* iter)
 {
     double fa = f(a), fb = f(b);
     double ga = g(a), gb = g(b);
-
-    int iter = 0;
 
     do
     {
@@ -31,8 +29,8 @@ double root(Func f, Func g, double a, double b, double eps)
             ga = gc;
         }
 
-        iter++;
-    } while (fabs(fa - fb) >= eps && iter < 1e6);
+        (*iter)++;
+    } while (fabs(fa - fb) >= eps && (*iter) < 1e6);
 
     return a;
 }
@@ -285,9 +283,11 @@ int main(int argc, char *argv[])
 
     if (print_roots)
     {
-        double x1 = root(f1, f2, 4, 8, 0.0001);
-        double x2 = root(f1, f3, 2.1, 4, 0.0001);
-        double x3 = root(f2, f3, 4, 6, 0.0001);
+        int iter1 = 0, iter2 = 0, iter3 = 0;
+        
+        double x1 = root(f1, f2, 4, 8, 0.0001, &iter1);
+        double x2 = root(f1, f3, 2.1, 4, 0.0001, &iter2);
+        double x3 = root(f2, f3, 4, 6, 0.0001, &iter3);
 
         printf("Точки пересечения функций:\n"
                "\t y = lnx \t y = -2x + 14 \t\t при x = %lf\n"
@@ -297,6 +297,8 @@ int main(int argc, char *argv[])
 
         return 0;
     }
+
+
 
     return 0;
 }
