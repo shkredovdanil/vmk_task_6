@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "functions.h"
@@ -71,7 +72,7 @@ double integral(Func f, double a, double b, double eps)
 
 double g1(double x)
 {
-    return ln(x);
+    return log(x);
 }
 
 double g2(double x)
@@ -173,7 +174,7 @@ int main(int argc, char *argv[])
             char *ptrEnd;
             a = strtod(argv[i + 3], &ptrEnd);
 
-            if (ptrEnd != '\0')
+            if (*ptrEnd != '\0')
             {
                 printf("Ошибка. Некорректное значение %s", argv[i + 3]);
 
@@ -182,7 +183,7 @@ int main(int argc, char *argv[])
 
             b = strtod(argv[i + 4], &ptrEnd);
 
-            if (ptrEnd != '\0')
+            if (*ptrEnd != '\0')
             {
                 printf("Ошибка. Некорректное значение %s", argv[i + 4]);
 
@@ -200,20 +201,21 @@ int main(int argc, char *argv[])
             {
                 printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
                        "Задайте иные промежутки.",
-                       f1_root == 1 ? f1_root : f2_root, b);
+                       (int)(f1_root == 1 ? f1_root : f2_root), a, b);
 
                 return 1;
             }
 
             double eps = strtod(argv[i + 5], &ptrEnd);
 
-            if (ptrEnd != '\0' || eps <= 0)
+            if (*ptrEnd != '\0' || eps <= 0)
             {
                 printf("Ошибка. Некорректное значение eps.\n");
 
                 return 1;
             }
         }
+        
     }
 
     return 0;
