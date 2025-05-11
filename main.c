@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
             {
                 printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
                        "Задайте иные промежутки.",
-                       f_integral, a, b);
+                       (int) f_integral, a, b);
 
                 return 1;
             }
@@ -283,7 +283,20 @@ int main(int argc, char *argv[])
         }
     }
 
-    
+    if (print_roots)
+    {
+        double x1 = root(f1, f2, 4, 8, 0.0001);
+        double x2 = root(f1, f3, 2.1, 4, 0.0001);
+        double x3 = root(f2, f3, 4, 6, 0.0001);
+
+        printf("Точки пересечения функций:\n"
+               "\t y = lnx \t y = -2x + 14 \t\t при x = %lf\n"
+               "\t y = lnx \t y = 1 / (2 - x) + 6 \t при x = %lf\n"
+               "\t y = -2x + 14 \t y = 1 / (2 - x) + 6 \t при x = %lf\n",
+               x1, x2, x3);
+
+        return 0;
+    }
 
     return 0;
 }
