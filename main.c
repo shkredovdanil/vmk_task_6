@@ -94,8 +94,7 @@ void helper(void)
            "--test-integral f a b eps  Тест интеграла от функции f на отрезке [a, b] с точностью eps;\n"
            "--test-root f1 f2 a b eps  Тест пересечения функций f1, f2 на отрезке [a, b] с точностью eps.\n\n"
            "Пример правильного ввода:  ./main --print-roots --print-iters\n"
-           "Пример правильного ввода:  ./main --test-root 1 2 1 3 0.001\n"
-           "Не спешивайте print и test!!!\n");
+           "Пример правильного ввода:  ./main --test-root 1 2 1 3 0.001\n");
 }
 
 void print_function(void)
@@ -132,8 +131,6 @@ int main(int argc, char *argv[])
         if (!strcmp(argv[i], "--print-functions"))
         {
             print_function();
-
-            return 1;
         }
 
         if (!strcmp(argv[i], "--print-area"))
@@ -323,8 +320,6 @@ int main(int argc, char *argv[])
                "\tТочка пересечения:\tx = %lf\n"
                "\tКоличество итераций:\t%d\n",
                x, iter);
-
-        return 0;
     }
 
     if (test_integ)
@@ -336,8 +331,6 @@ int main(int argc, char *argv[])
         printf("Результат тестирования нахождения площади между функцией %d и x = 0:\n"
                "\tПлощадь области:\tx = %lf\n",
                f_integral, x);
-
-        return 0;
     }
 
     int iter1 = 0, iter2 = 0, iter3 = 0;
