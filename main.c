@@ -327,6 +327,19 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    if (test_integ)
+    {
+        double (*functions[])(double) = {f1, f2, f3};
+
+        double x = integral(functions[f_integral - 1], a, b, eps2);
+
+        printf("Результат тестирования нахождения площади между функцией %d и x = 0:\n"
+               "\tПлощадь области:\tx = %lf\n",
+               f_integral, x);
+
+        return 0;
+    }
+
     int iter1 = 0, iter2 = 0, iter3 = 0;
 
     double x1 = root(f1, f2, 4, 8, 0.001, &iter1);
