@@ -87,14 +87,15 @@ void helper(void)
 {
     printf("Справка:\n"
            "--help                     Показать это сообщение;\n"
-           "--print-functions          Вывести функции в соответствии с их нумерацией.\n"
+           "--print-functions          Вывести функции в соответствии с их нумерацией;\n"
            "--print-roots              Напечатать точки пересечения функций;\n"
            "--print-iters              Напечать количество итераций для нахождения точек пересечения;\n"
+           "--print-area               Напечатать площадь фигуры, ограниченной функциями 1-3;\n"
            "--test-integral f a b eps  Тест интеграла от функции f на отрезке [a, b] с точностью eps;\n"
            "--test-root f1 f2 a b eps  Тест пересечения функций f1, f2 на отрезке [a, b] с точностью eps.\n\n"
            "Пример правильного ввода:  ./main --print-roots --print-iters\n"
-           "Пример правильного ввода:  ./main --test-root 1 2 1 3 0.0001\n"
-           "Не спешивайте print и test!!!");
+           "Пример правильного ввода:  ./main --test-root 1 2 1 3 0.001\n"
+           "Не спешивайте print и test!!!\n");
 }
 
 void print_function(void)
@@ -110,13 +111,15 @@ int main(int argc, char *argv[])
     {
         printf("Не указаны опции для программы. Воспользуйтесь справкой.\n");
         helper();
+
         return 1;
     }
 
-    int print_roots = 0, print_iters = 0, test_integ = 0, test_root = 0;
+    int print_roots = 0, print_iters = 0, print_area = 0, test_integ = 0, test_root = 0;
     double a = 0, b = 0, eps = 0, f1_root = 0, f2_root = 0;
     double f_integral = 0;
 
+    // Обработчик ошибок и опций
     for (int i = 1; i < argc; i++)
     {
         if (!strcmp(argv[i], "--help"))
@@ -131,6 +134,11 @@ int main(int argc, char *argv[])
             print_function();
 
             return 1;
+        }
+
+        if (!strcmp(argv[i], "--print-area"))
+        {
+            print_area = 1;
         }
 
         if (!strcmp(argv[i], "--print-roots"))
@@ -286,38 +294,35 @@ int main(int argc, char *argv[])
         }
     }
 
+    int iter1 = 0, iter2 = 0, iter3 = 0;
+
+    double x1 = root(f1, f2, 4, 8, 0.001, &iter1);
+    double x2 = root(f1, f3, 2.1, 4, 0.001, &iter2);
+    double x3 = root(f2, f3, 4, 6, 0.001, &iter3);
+
+    double area = integral(f3, x2, x3, 0.001) + integral(f2, x3, x1, 0.001) - integral(f1, x2, x1, 0.001);
+
     if (print_roots)
     {
-        int iter1 = 0, iter2 = 0, iter3 = 0;
-
-        double x1 = root(f1, f2, 4, 8, 0.0001, &iter1);
-        double x2 = root(f1, f3, 2.1, 4, 0.0001, &iter2);
-        double x3 = root(f2, f3, 4, 6, 0.0001, &iter3);
-
         printf("Точки пересечения функций:\n"
                "\t y = lnx \t y = -2x + 14 \t\t при x = %lf\n"
                "\t y = lnx \t y = 1 / (2 - x) + 6 \t при x = %lf\n"
                "\t y = -2x + 14 \t y = 1 / (2 - x) + 6 \t при x = %lf\n",
                x1, x2, x3);
-
-        return 0;
     }
 
     if (print_iters)
     {
-        int iter1 = 0, iter2 = 0, iter3 = 0;
-
-        double x1 = root(f1, f2, 4, 8, 0.0001, &iter1);
-        double x2 = root(f1, f3, 2.1, 4, 0.0001, &iter2);
-        double x3 = root(f2, f3, 4, 6, 0.0001, &iter3);
 
         printf("Количество итераций для нахождения точек пересечения функций:\n"
                "\t y = lnx \t y = -2x + 14 \t\t за %d\n"
                "\t y = lnx \t y = 1 / (2 - x) + 6 \t за %d\n"
                "\t y = -2x + 14 \t y = 1 / (2 - x) + 6 \t за %d\n",
                iter1, iter2, iter3);
+    }
 
-        return 0;
+    if (print_area){
+        printf("Площадь фигуры, ограниченной функциями 1-3 равна: %lf\n", area);
     }
 
     return 0;
