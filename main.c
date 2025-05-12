@@ -116,8 +116,8 @@ int main(int argc, char *argv[])
     }
 
     int print_roots = 0, print_iters = 0, print_area = 0, test_integ = 0, test_root = 0;
-    double a = 0, b = 0, eps = 0, f1_root = 0, f2_root = 0;
-    double f_integral = 0;
+    int f1_root = 0, f2_root = 0, f_integral = 0;
+    double a = 0, b = 0, eps1 = 0, eps2 = 0;
 
     // Обработчик ошибок и опций
     for (int i = 1; i < argc; i++)
@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
 
             if (f1_root > 3 || f1_root < 1 || f2_root > 3 || f2_root < 1)
             {
-                printf("Ошибка функции имеют нумерацию от 1 до 3.\n");
+                printf("Ошибка. Функции имеют нумерацию от 1 до 3.\n");
                 helper();
 
                 return 1;
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
 
             if (f1_root == f2_root)
             {
-                printf("Ошибка. Задайте две разные функции");
+                printf("Ошибка. Задайте две разные функции\n");
                 helper();
 
                 return 1;
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 
             if (*ptrEnd != '\0')
             {
-                printf("Ошибка. Некорректное значение %s", argv[i + 3]);
+                printf("Ошибка. Некорректное значение %s\n", argv[i + 3]);
 
                 return 1;
             }
@@ -196,14 +196,23 @@ int main(int argc, char *argv[])
 
             if (*ptrEnd != '\0')
             {
-                printf("Ошибка. Некорректное значение %s", argv[i + 4]);
+                printf("Ошибка. Некорректное значение %s\n", argv[i + 4]);
 
                 return 1;
             }
 
             if (a >= b)
             {
-                printf("Ошибка. Задайте верные пределы нахождения точек пересечения функций. (a < b)");
+                printf("Ошибка. Задайте верные пределы нахождения точек пересечения функций. (a < b)\n");
+
+                return 1;
+            }
+
+            if ((f1_root == 3 || f2_root == 3) && 2 >= a && 2 <= b)
+            {
+                printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
+                       "Задайте иные промежутки.\n",
+                       (f1_root == 3 ? f1_root : f2_root), a, b);
 
                 return 1;
             }
@@ -211,15 +220,15 @@ int main(int argc, char *argv[])
             if ((f1_root == 1 || f2_root == 1) && a <= 0)
             {
                 printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
-                       "Задайте иные промежутки.",
-                       (int)(f1_root == 1 ? f1_root : f2_root), a, b);
+                       "Задайте иные промежутки.\n",
+                       (f1_root == 1 ? f1_root : f2_root), a, b);
 
                 return 1;
             }
 
-            double eps = strtod(argv[i + 5], &ptrEnd);
+            eps1 = strtod(argv[i + 5], &ptrEnd);
 
-            if (*ptrEnd != '\0' || eps <= 0)
+            if (*ptrEnd != '\0' || eps1 <= 0)
             {
                 printf("Ошибка. Некорректное значение eps.\n");
 
@@ -242,7 +251,7 @@ int main(int argc, char *argv[])
 
             if (f_integral > 3 || f_integral < 1)
             {
-                printf("Ошибка функции имеют нумерацию от 1 до 3.\n");
+                printf("Ошибка. Функции имеют нумерацию от 1 до 3.\n");
                 helper();
 
                 return 1;
@@ -253,7 +262,7 @@ int main(int argc, char *argv[])
 
             if (*ptrEnd != '\0')
             {
-                printf("Ошибка. Некорректное значение %s", argv[i + 2]);
+                printf("Ошибка. Некорректное значение %s\n", argv[i + 2]);
 
                 return 1;
             }
@@ -262,14 +271,23 @@ int main(int argc, char *argv[])
 
             if (*ptrEnd != '\0')
             {
-                printf("Ошибка. Некорректное значение %s", argv[i + 3]);
+                printf("Ошибка. Некорректное значение %s\n", argv[i + 3]);
 
                 return 1;
             }
 
             if (a >= b)
             {
-                printf("Ошибка. Задайте верные пределы нахождения точек пересечения функций. (a < b)");
+                printf("Ошибка. Задайте верные пределы нахождения точек пересечения функций. (a < b)\n");
+
+                return 1;
+            }
+
+            if (f_integral == 3 && 2 >= a && 2 <= b)
+            {
+                printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
+                       "Задайте иные промежутки.\n",
+                       f_integral, a, b);
 
                 return 1;
             }
@@ -277,21 +295,36 @@ int main(int argc, char *argv[])
             if (f_integral == 1 && a <= 0)
             {
                 printf("Ошибка. Функция %d частично не определена на промежутке [%lf, %lf]."
-                       "Задайте иные промежутки.",
+                       "Задайте иные промежутки.\n",
                        (int)f_integral, a, b);
 
                 return 1;
             }
 
-            double eps = strtod(argv[i + 4], &ptrEnd);
+            eps2 = strtod(argv[i + 4], &ptrEnd);
 
-            if (*ptrEnd != '\0' || eps <= 0)
+            if (*ptrEnd != '\0' || eps2 <= 0)
             {
                 printf("Ошибка. Некорректное значение eps.\n");
 
                 return 1;
             }
         }
+    }
+
+    if (test_root)
+    {
+        double (*functions[])(double) = {f1, f2, f3};
+        int iter = 0;
+
+        double x = root(functions[f1_root - 1], functions[f2_root - 1], a, b, eps1, &iter);
+
+        printf("Результат тестирования нахождения точки пересечения двух функций:\n"
+               "\tТочка пересечения:\tx = %lf\n"
+               "\tКоличество итераций:\t%d\n",
+               x, iter);
+
+        return 0;
     }
 
     int iter1 = 0, iter2 = 0, iter3 = 0;
@@ -321,7 +354,8 @@ int main(int argc, char *argv[])
                iter1, iter2, iter3);
     }
 
-    if (print_area){
+    if (print_area)
+    {
         printf("Площадь фигуры, ограниченной функциями 1-3 равна: %lf\n", area);
     }
 
